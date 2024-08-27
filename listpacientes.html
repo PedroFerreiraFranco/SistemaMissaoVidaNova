@@ -49,7 +49,10 @@
                     <img src="/img/logo2.png" alt="Logo">
                     Missão Vida Nova
                 </a>
-                <div class="collapse navbar-collapse">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
                             <a class="nav-link" href="home.html">Home</a>
@@ -71,8 +74,8 @@
         <h2>Pacientes</h2>
         <button class="btn btn-primary mb-3" onclick="window.location.href='formpacientes.html'">Manejar Pacientes</button>
 
-        <!-- Tabela -->
-        <div class="container mt-3">
+        <!-- Tabela Responsiva -->
+        <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -86,6 +89,7 @@
                         <th>Situação Carteira de Vacinação</th>
                         <th>Data de Entrada</th>
                         <th>Status</th>
+                        <th>Observação</th>
                     </tr>
                 </thead>
                 <tbody id="tbody1">
@@ -122,43 +126,47 @@
         var stdNo = 0;
         var tbody = document.getElementById('tbody1');
 
-        function AddItemToTable(nome, dataNascimento, cpf, rg, telefoneResponsavel, emailResponsavel, situacaoCarteira, dataEntrada, status) {
-            let trow = document.createElement("tr");
-            let td1 = document.createElement('td');
-            let td2 = document.createElement('td');
-            let td3 = document.createElement('td');
-            let td4 = document.createElement('td');
-            let td5 = document.createElement('td');
-            let td6 = document.createElement('td');
-            let td7 = document.createElement('td');
-            let td8 = document.createElement('td');
-            let td9 = document.createElement('td');
-            let td10 = document.createElement('td');
+        function AddItemToTable(nome, dataNascimento, cpf, rg, telefoneResponsavel, emailResponsavel, situacaoCarteira, dataEntrada, status, observacao) {
+        let trow = document.createElement("tr");
+        let td1 = document.createElement('td');
+        let td2 = document.createElement('td');
+        let td3 = document.createElement('td');
+        let td4 = document.createElement('td');
+        let td5 = document.createElement('td');
+        let td6 = document.createElement('td');
+        let td7 = document.createElement('td');
+        let td8 = document.createElement('td');
+        let td9 = document.createElement('td');
+        let td10 = document.createElement('td');
+        let td11 = document.createElement('td');
 
-            td1.innerHTML = ++stdNo;
-            td2.innerHTML = nome;
-            td3.innerHTML = dataNascimento;
-            td4.innerHTML = cpf;
-            td5.innerHTML = rg;
-            td6.innerHTML = telefoneResponsavel;
-            td7.innerHTML = emailResponsavel;
-            td8.innerHTML = situacaoCarteira;
-            td9.innerHTML = dataEntrada;
-            td10.innerHTML = status;
+        td1.innerHTML = ++stdNo;
+        td2.innerHTML = nome;
+        td3.innerHTML = dataNascimento;
+        td4.innerHTML = cpf;
+        td5.innerHTML = rg;
+        td6.innerHTML = telefoneResponsavel;
+        td7.innerHTML = emailResponsavel;
+        td8.innerHTML = situacaoCarteira;
+        td9.innerHTML = dataEntrada;
+        td10.innerHTML = status;
+        td11.innerHTML = observacao;
 
-            trow.appendChild(td1);
-            trow.appendChild(td2);
-            trow.appendChild(td3);
-            trow.appendChild(td4);
-            trow.appendChild(td5);
-            trow.appendChild(td6);
-            trow.appendChild(td7);
-            trow.appendChild(td8);
-            trow.appendChild(td9);
-            trow.appendChild(td10);
+        trow.appendChild(td1);
+        trow.appendChild(td2);
+        trow.appendChild(td3);
+        trow.appendChild(td4);
+        trow.appendChild(td5);
+        trow.appendChild(td6);
+        trow.appendChild(td7);
+        trow.appendChild(td8);
+        trow.appendChild(td9);
+        trow.appendChild(td10);
+        trow.appendChild(td11);
 
-            tbody.appendChild(trow);
-        }
+        tbody.appendChild(trow);
+    }
+
 
         function AddAllItemsToTable(ThePatients) {
             stdNo = 0;
@@ -173,7 +181,8 @@
                     element.EmailResponsavel,
                     element.SituacaoCarteira,
                     element.DataEntrada,
-                    element.Status);
+                    element.Status,
+                    element.Observacao);
             });
         }
 
@@ -184,31 +193,21 @@
             get(child(dbRef, "ThePatients"))
                 .then((snapshot) => {
                     if (snapshot.exists()) {
-                        var patients = [];
-                        snapshot.forEach(childSnapshot => {
+                        let patients = [];
+                        snapshot.forEach((childSnapshot) => {
                             patients.push(childSnapshot.val());
                         });
                         AddAllItemsToTable(patients);
                     } else {
-                        console.log("No data available");
+                        alert("No data available");
                     }
                 })
                 .catch((error) => {
-                    console.error("Error getting data:", error);
+                    console.error(error);
                 });
         }
 
-        window.onload = () => {
-            GetAllDataOnce();
-        };
-
+        window.onload = GetAllDataOnce;
     </script>
-
-    <script src="auth.js"></script>
-
-    <!-- Scripts do Bootstrap -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

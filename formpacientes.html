@@ -124,12 +124,13 @@
             <div class="form-group">
                 <label for="statusBox">Status</label>
                 <select id="statusBox" class="form-control">
-                    <option value="Em Espera">Em Espera</option>
-                    <option value="Em recuperação">Em recuperação</option>
-                    <option value="Afastado">Afastado</option>
-                    <option value="Expulso">Expulso</option>
-                    <option value="Concluído">Concluído</option>
+                    <option value="Ativo">Ativo</option>
+                    <option value="Inativo">Inativo</option>
                 </select>
+            </div>
+            <div class="form-group">
+                <label for="obcervacaoBox">Observação</label>
+                <input id="obcervacaoBox" class="form-control" type="text" placeholder="Obvservação">
             </div>
             
             <div class="btn-group">
@@ -137,6 +138,7 @@
                 <button type="button" id="SelectBtn" class="btn btn-secondary">Selecionar</button>
                 <button type="button" id="EditBtn" class="btn btn-warning">Editar</button>
                 <button type="button" id="DeleteBtn" class="btn btn-danger">Deletar</button>
+                <button type="button" id="DeleteBtn" class="btn btn-secondary" onclick="window.location.href='listpacientes.html'">Cancelar</button>
             </div>
         </form>
     </div>
@@ -179,6 +181,7 @@
         var situacaoCarteiraBox = document.getElementById("situacaoCarteiraBox");
         var dataEntradaBox = document.getElementById("dataEntradaBox");
         var statusBox = document.getElementById("statusBox");
+        var obcervacaoBox = document.getElementById('obcervacaoBox')
 
         var addBtn = document.getElementById("AddBtn");
         var selectBtn = document.getElementById("SelectBtn");
@@ -194,7 +197,8 @@
             emailResponsavelBox.value = "";
             situacaoCarteiraBox.value = "Vacinas Pendentes"; // Default value
             dataEntradaBox.value = "";
-            statusBox.value = "Em Espera"; // Default value
+            statusBox.value = "Inativo"; // Default value
+            obcervacaoBox.value = "";
         }
 
         function SelectData() {
@@ -210,6 +214,7 @@
                     situacaoCarteiraBox.value = snapshot.val().SituacaoCarteira;
                     dataEntradaBox.value = snapshot.val().DataEntrada;
                     statusBox.value = snapshot.val().Status;
+                    obcervacaoBox.value = snapshot.val().ObcervacaoBox;
                 } else {
                     alert("No data found");
                 }
@@ -228,7 +233,8 @@
                 EmailResponsavel: emailResponsavelBox.value,
                 SituacaoCarteira: situacaoCarteiraBox.value,
                 DataEntrada: dataEntradaBox.value,
-                Status: statusBox.value
+                Status: statusBox.value,
+                Obcervacao: obcervacaoBox.value
             }).then(() => {
                 alert("Data stored successfully");
                 clearFields();
@@ -247,7 +253,9 @@
                 EmailResponsavel: emailResponsavelBox.value,
                 SituacaoCarteira: situacaoCarteiraBox.value,
                 DataEntrada: dataEntradaBox.value,
-                Status: statusBox.value
+                Status: statusBox.value,
+                Obcervacao: obcervacaoBox.value
+
             }).then(() => {
                 alert("Data updated successfully");
                 clearFields();
