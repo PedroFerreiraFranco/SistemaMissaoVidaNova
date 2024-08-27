@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Pacientes</title>
+    <!-- Bootstrap 4.5 -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin-top: 20px;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .btn-group {
+            margin-top: 20px;
+        }
+        .alert {
+            margin-top: 20px;
+        }
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 10;
+            background-color: #000040;
+            border-bottom: 3px solid white;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        .navbar-brand img {
+            height: 50px;
+            margin-right: 15px;
+        }
+
+        .content {
+            margin-top: 100px;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" href="home.html">
+                    <img src="/img/logo2.png" alt="Logo">
+                    Missão Vida Nova
+                </a>
+                <div class="collapse navbar-collapse">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="home.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="listpacientes.html">Pacientes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="listfuncionarios.html">Funcionários</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1 class="mb-4">Cadastro de Pacientes</h1>
+        
+        <div class="alert alert-info" role="alert">
+            Utilize o formulário abaixo para adicionar, selecionar, editar ou deletar dados.
+        </div>
+        
+        <form id="pacienteForm">
+            <div class="form-group">
+                <label for="NomeBox">Nome</label>
+                <input id="NomeBox" class="form-control" type="text" placeholder="Nome">
+            </div>
+            <div class="form-group">
+                <label for="dataNascimentoBox">Data de Nascimento</label>
+                <input id="dataNascimentoBox" class="form-control" type="date">
+            </div>
+            <div class="form-group">
+                <label for="cpfBox">CPF</label>
+                <input id="cpfBox" class="form-control" type="text" placeholder="CPF">
+            </div>
+            <div class="form-group">
+                <label for="rgBox">RG</label>
+                <input id="rgBox" class="form-control" type="text" placeholder="RG">
+            </div>
+            <div class="form-group">
+                <label for="telefoneResponsavelBox">Telefone do Responsável</label>
+                <input id="telefoneResponsavelBox" class="form-control" type="text" placeholder="Telefone do Responsável">
+            </div>
+            <div class="form-group">
+                <label for="emailResponsavelBox">E-mail do Responsável</label>
+                <input id="emailResponsavelBox" class="form-control" type="email" placeholder="E-mail do Responsável">
+            </div>
+            <div class="form-group">
+                <label for="situacaoCarteiraBox">Situação Carteira de Vacinação</label>
+                <select id="situacaoCarteiraBox" class="form-control">
+                    <option value="Vacinas Pendentes">Vacinas Pendentes</option>
+                    <option value="Vacinas em dia">Vacinas em dia</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="dataEntradaBox">Data de Entrada</label>
+                <input id="dataEntradaBox" class="form-control" type="date">
+            </div>
+            <div class="form-group">
+                <label for="statusBox">Status</label>
+                <select id="statusBox" class="form-control">
+                    <option value="Em Espera">Em Espera</option>
+                    <option value="Em recuperação">Em recuperação</option>
+                    <option value="Afastado">Afastado</option>
+                    <option value="Expulso">Expulso</option>
+                    <option value="Concluído">Concluído</option>
+                </select>
+            </div>
+            
+            <div class="btn-group">
+                <button type="button" id="AddBtn" class="btn btn-primary">Adicionar</button>
+                <button type="button" id="SelectBtn" class="btn btn-secondary">Selecionar</button>
+                <button type="button" id="EditBtn" class="btn btn-warning">Editar</button>
+                <button type="button" id="DeleteBtn" class="btn btn-danger">Deletar</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Scripts -->
+    <script src="auth.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-analytics.js";
+        import { getDatabase, ref, get, set, child, update, remove } 
+        from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
+      
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyCNPBamh-7VZLwNvfG3WVGPYwviipig2Aw",
+          authDomain: "missaovidanova-af3a5.firebaseapp.com",
+          projectId: "missaovidanova-af3a5",
+          storageBucket: "missaovidanova-af3a5.appspot.com",
+          messagingSenderId: "937040393874",
+          appId: "1:937040393874:web:8884b2c52fec36f39ed84b",
+          measurementId: "G-EY5711YV46"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getDatabase();
+
+        // Cache DOM elements
+        var nomeBox = document.getElementById("NomeBox");
+        var dataNascimentoBox = document.getElementById("dataNascimentoBox");
+        var cpfBox = document.getElementById("cpfBox");
+        var rgBox = document.getElementById("rgBox");
+        var telefoneResponsavelBox = document.getElementById("telefoneResponsavelBox");
+        var emailResponsavelBox = document.getElementById("emailResponsavelBox");
+        var situacaoCarteiraBox = document.getElementById("situacaoCarteiraBox");
+        var dataEntradaBox = document.getElementById("dataEntradaBox");
+        var statusBox = document.getElementById("statusBox");
+
+        var addBtn = document.getElementById("AddBtn");
+        var selectBtn = document.getElementById("SelectBtn");
+        var editBtn = document.getElementById("EditBtn");
+        var deleteBtn = document.getElementById("DeleteBtn");
+
+        function clearFields() {
+            nomeBox.value = "";
+            dataNascimentoBox.value = "";
+            cpfBox.value = "";
+            rgBox.value = "";
+            telefoneResponsavelBox.value = "";
+            emailResponsavelBox.value = "";
+            situacaoCarteiraBox.value = "Vacinas Pendentes"; // Default value
+            dataEntradaBox.value = "";
+            statusBox.value = "Em Espera"; // Default value
+        }
+
+        function SelectData() {
+            const dbref = ref(db);
+            get(child(dbref, "ThePatients/" + nomeBox.value)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    nomeBox.value = snapshot.val().Nome;
+                    dataNascimentoBox.value = snapshot.val().DataNascimento;
+                    cpfBox.value = snapshot.val().CPF;
+                    rgBox.value = snapshot.val().RG;
+                    telefoneResponsavelBox.value = snapshot.val().TelefoneResponsavel;
+                    emailResponsavelBox.value = snapshot.val().EmailResponsavel;
+                    situacaoCarteiraBox.value = snapshot.val().SituacaoCarteira;
+                    dataEntradaBox.value = snapshot.val().DataEntrada;
+                    statusBox.value = snapshot.val().Status;
+                } else {
+                    alert("No data found");
+                }
+            }).catch((error) => {
+                alert("Unsuccessful, error: " + error);
+            });
+        } 
+
+        function InsertData() {
+            set(ref(db, "ThePatients/" + nomeBox.value), {
+                Nome: nomeBox.value,
+                DataNascimento: dataNascimentoBox.value,
+                CPF: cpfBox.value,
+                RG: rgBox.value,
+                TelefoneResponsavel: telefoneResponsavelBox.value,
+                EmailResponsavel: emailResponsavelBox.value,
+                SituacaoCarteira: situacaoCarteiraBox.value,
+                DataEntrada: dataEntradaBox.value,
+                Status: statusBox.value
+            }).then(() => {
+                alert("Data stored successfully");
+                clearFields();
+            }).catch((error) => {
+                alert("Unsuccessful, error: " + error);
+            });
+        }
+
+        function UpdateData() {
+            update(ref(db, "ThePatients/" + nomeBox.value), {
+                Nome: nomeBox.value,
+                DataNascimento: dataNascimentoBox.value,
+                CPF: cpfBox.value,
+                RG: rgBox.value,
+                TelefoneResponsavel: telefoneResponsavelBox.value,
+                EmailResponsavel: emailResponsavelBox.value,
+                SituacaoCarteira: situacaoCarteiraBox.value,
+                DataEntrada: dataEntradaBox.value,
+                Status: statusBox.value
+            }).then(() => {
+                alert("Data updated successfully");
+                clearFields();
+            }).catch((error) => {
+                alert("Unsuccessful, error: " + error);
+            });
+        }
+
+        function DeleteData() {
+            remove(ref(db, "ThePatients/" + nomeBox.value)).then(() => {
+                alert("Data removed successfully");
+                clearFields();
+            }).catch((error) => {
+                alert("Unsuccessful, error: " + error);
+            });
+        }
+
+        addBtn.addEventListener('click', InsertData);
+        selectBtn.addEventListener('click', SelectData);
+        editBtn.addEventListener('click', UpdateData);
+        deleteBtn.addEventListener('click', DeleteData);
+
+    </script>
+</body>
+</html>

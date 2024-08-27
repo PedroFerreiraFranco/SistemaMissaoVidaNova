@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pacientes - Missão Vida Nova</title>
+    <!-- Bootstrap 4.5 -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background: #f7f9fc;
+        }
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 10;
+            background-color: #000040;
+            border-bottom: 3px solid white;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        .navbar-brand img {
+            height: 50px;
+            margin-right: 15px;
+        }
+
+        .content {
+            margin-top: 100px;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header com navbar fixo -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" href="home.html">
+                    <img src="/img/logo2.png" alt="Logo">
+                    Missão Vida Nova
+                </a>
+                <div class="collapse navbar-collapse">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="home.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="listpacientes.html">Pacientes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="listfuncionarios.html">Funcionários</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Container -->
+    <div class="container mt-5 pt-5">
+        <h2>Pacientes</h2>
+        <button class="btn btn-primary mb-3" onclick="window.location.href='formpacientes.html'">Manejar Pacientes</button>
+
+        <!-- Tabela -->
+        <div class="container mt-3">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nome</th>
+                        <th>Data de Nascimento</th>
+                        <th>CPF</th>
+                        <th>RG</th>
+                        <th>Telefone do Responsável</th>
+                        <th>E-mail do Responsável</th>
+                        <th>Situação Carteira de Vacinação</th>
+                        <th>Data de Entrada</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody1">
+                    <!-- Conteúdo da tabela será adicionado aqui -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script type="module">
+        // Importação dos módulos Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-analytics.js";
+        import { getDatabase, ref, child, get } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
+
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCNPBamh-7VZLwNvfG3WVGPYwviipig2Aw",
+            authDomain: "missaovidanova-af3a5.firebaseapp.com",
+            databaseURL: "https://missaovidanova-af3a5-default-rtdb.firebaseio.com",
+            projectId: "missaovidanova-af3a5",
+            storageBucket: "missaovidanova-af3a5.appspot.com",
+            messagingSenderId: "937040393874",
+            appId: "1:937040393874:web:8884b2c52fec36f39ed84b",
+            measurementId: "G-EY5711YV46"
+        };
+
+        // Inicialização do Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getDatabase();
+
+        // Função para adicionar itens à tabela
+        var stdNo = 0;
+        var tbody = document.getElementById('tbody1');
+
+        function AddItemToTable(nome, dataNascimento, cpf, rg, telefoneResponsavel, emailResponsavel, situacaoCarteira, dataEntrada, status) {
+            let trow = document.createElement("tr");
+            let td1 = document.createElement('td');
+            let td2 = document.createElement('td');
+            let td3 = document.createElement('td');
+            let td4 = document.createElement('td');
+            let td5 = document.createElement('td');
+            let td6 = document.createElement('td');
+            let td7 = document.createElement('td');
+            let td8 = document.createElement('td');
+            let td9 = document.createElement('td');
+            let td10 = document.createElement('td');
+
+            td1.innerHTML = ++stdNo;
+            td2.innerHTML = nome;
+            td3.innerHTML = dataNascimento;
+            td4.innerHTML = cpf;
+            td5.innerHTML = rg;
+            td6.innerHTML = telefoneResponsavel;
+            td7.innerHTML = emailResponsavel;
+            td8.innerHTML = situacaoCarteira;
+            td9.innerHTML = dataEntrada;
+            td10.innerHTML = status;
+
+            trow.appendChild(td1);
+            trow.appendChild(td2);
+            trow.appendChild(td3);
+            trow.appendChild(td4);
+            trow.appendChild(td5);
+            trow.appendChild(td6);
+            trow.appendChild(td7);
+            trow.appendChild(td8);
+            trow.appendChild(td9);
+            trow.appendChild(td10);
+
+            tbody.appendChild(trow);
+        }
+
+        function AddAllItemsToTable(ThePatients) {
+            stdNo = 0;
+            tbody.innerHTML = "";
+            ThePatients.forEach(element => {
+                AddItemToTable(
+                    element.Nome,
+                    element.DataNascimento,
+                    element.CPF,
+                    element.RG,
+                    element.TelefoneResponsavel,
+                    element.EmailResponsavel,
+                    element.SituacaoCarteira,
+                    element.DataEntrada,
+                    element.Status);
+            });
+        }
+
+        // Função para obter dados do Firebase
+        function GetAllDataOnce() {
+            const dbRef = ref(db);
+
+            get(child(dbRef, "ThePatients"))
+                .then((snapshot) => {
+                    if (snapshot.exists()) {
+                        var patients = [];
+                        snapshot.forEach(childSnapshot => {
+                            patients.push(childSnapshot.val());
+                        });
+                        AddAllItemsToTable(patients);
+                    } else {
+                        console.log("No data available");
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error getting data:", error);
+                });
+        }
+
+        window.onload = () => {
+            GetAllDataOnce();
+        };
+
+    </script>
+
+    <script src="auth.js"></script>
+
+    <!-- Scripts do Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

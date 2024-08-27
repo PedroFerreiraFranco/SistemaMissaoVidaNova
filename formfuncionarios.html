@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Missão Vida Nova</title>
+    <!-- Bootstrap 4.5 -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin-top: 20px;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .btn-group {
+            margin-top: 20px;
+        }
+        .alert {
+            margin-top: 20px;
+        }
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 10;
+            background-color: #000040;
+            border-bottom: 3px solid white;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        .navbar-brand img {
+            height: 50px;
+            margin-right: 15px;
+        }
+
+        .content {
+            margin-top: 100px;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" href="home.html">
+                    <img src="/img/logo2.png" alt="Logo">
+                    Missão Vida Nova
+                </a>
+                <div class="collapse navbar-collapse">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="home.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="listpacientes.html">Pacientes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="listfuncionarios.html">Funcionários</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1 class="mb-4">Cadastro de Funcionários</h1>
+        
+        <div class="alert alert-info" role="alert">
+            Utilize o formulário abaixo para adicionar, selecionar, editar ou deletar dados.
+        </div>
+        
+        <form id="funcionarioForm">
+            <div class="form-group">
+                <label for="NomeBox">Nome</label>
+                <input id="NomeBox" class="form-control" type="text" placeholder="Nome">
+            </div>
+            <div class="form-group">
+                <label for="cpfBox">CPF</label>
+                <input id="cpfBox" class="form-control" type="text" placeholder="CPF">
+            </div>
+            <div class="form-group">
+                <label for="rgBox">RG</label>
+                <input id="rgBox" class="form-control" type="text" placeholder="RG">
+            </div>
+            <div class="form-group">
+                <label for="dataNasciemtnoBox">Data de Nascimento</label>
+                <input id="dataNasciemtnoBox" class="form-control" type="date">
+            </div>
+            <div class="form-group">
+                <label for="salarioBox">Salário</label>
+                <input id="salarioBox" class="form-control" type="text" placeholder="Salário">
+            </div>
+            <div class="form-group">
+                <label for="telefoneBox">Telefone</label>
+                <input id="telefoneBox" class="form-control" type="text" placeholder="Telefone">
+            </div>
+            <div class="form-group">
+                <label for="emailBox">E-mail</label>
+                <input id="emailBox" class="form-control" type="email" placeholder="E-mail">
+            </div>
+            <div class="form-group">
+                <label for="funcaoBox">Função</label>
+                <select id="funcaoBox" class="form-control">
+                    <option value="secretaria">Secretária</option>
+                    <option value="cozinheiro">Cozinheiro</option>
+                    <option value="gerente">Gerente</option>
+                </select>
+            </div>
+            
+            <div class="btn-group">
+                <button type="button" id="AddBtn" class="btn btn-primary">Adicionar</button>
+                <button type="button" id="SelectBtn" class="btn btn-secondary">Selecionar</button>
+                <button type="button" id="EditBtn" class="btn btn-warning">Editar</button>
+                <button type="button" id="DeleteBtn" class="btn btn-danger">Deletar</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Scripts -->
+    <script src="auth.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-analytics.js";
+        import { getDatabase, ref, get, set, child, update, remove } 
+        from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
+      
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyCNPBamh-7VZLwNvfG3WVGPYwviipig2Aw",
+          authDomain: "missaovidanova-af3a5.firebaseapp.com",
+          projectId: "missaovidanova-af3a5",
+          storageBucket: "missaovidanova-af3a5.appspot.com",
+          messagingSenderId: "937040393874",
+          appId: "1:937040393874:web:8884b2c52fec36f39ed84b",
+          measurementId: "G-EY5711YV46"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getDatabase();
+
+        // Cache DOM elements
+        var namebox = document.getElementById("NomeBox");
+        var cpfbox = document.getElementById("cpfBox");
+        var rgbox = document.getElementById("rgBox");
+        var salariobox = document.getElementById("salarioBox");
+        var databox = document.getElementById("dataNasciemtnoBox");
+        var funcaobox = document.getElementById("funcaoBox");
+        var emailbox = document.getElementById("emailBox");
+        var telefonebox = document.getElementById("telefoneBox");
+
+        var addBtn = document.getElementById("AddBtn");
+        var selectBtn = document.getElementById("SelectBtn");
+        var editBtn = document.getElementById("EditBtn");
+        var deleteBtn = document.getElementById("DeleteBtn");
+
+        function clearFields() {
+            namebox.value = "";
+            cpfbox.value = "";
+            rgbox.value = "";
+            salariobox.value = "";
+            databox.value = "";
+            funcaobox.value = "";
+            emailbox.value = "";
+            telefonebox.value = "";
+        }
+
+        function SelectData() {
+            const dbref = ref(db);
+            get(child(dbref, "TheEmployees/" + namebox.value)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    namebox.value = snapshot.val().NameOfStd;
+                    cpfbox.value = snapshot.val().CpfOfStd;
+                    rgbox.value = snapshot.val().RgOfStd;
+                    salariobox.value = snapshot.val().SalarioOfStd;
+                    databox.value = snapshot.val().DataOfStd;
+                    funcaobox.value = snapshot.val().FuncaoOfStd;
+                    emailbox.value = snapshot.val().EmailOfStd;
+                    telefonebox.value = snapshot.val().TelefoneOfStd;
+                } else {
+                    alert("No data found");
+                }
+            }).catch((error) => {
+                alert("Unsuccessful, error: " + error);
+            });
+        } 
+
+        function InsertData() {
+            set(ref(db, "TheEmployees/" + namebox.value), {
+                NameOfStd: namebox.value,
+                CpfOfStd: cpfbox.value,
+                RgOfStd: rgbox.value,
+                SalarioOfStd: salariobox.value,
+                DataOfStd: databox.value,
+                FuncaoOfStd: funcaobox.value,
+                EmailOfStd: emailbox.value,
+                TelefoneOfStd: telefonebox.value
+            }).then(() => {
+                alert("Data stored successfully");
+                clearFields();
+            }).catch((error) => {
+                alert("Unsuccessful, error: " + error);
+            });
+        }
+
+        function UpdateData() {
+            update(ref(db, "TheEmployees/" + namebox.value), {
+                NameOfStd: namebox.value,
+                CpfOfStd: cpfbox.value,
+                RgOfStd: rgbox.value,
+                SalarioOfStd: salariobox.value,
+                DataOfStd: databox.value,
+                FuncaoOfStd: funcaobox.value,
+                EmailOfStd: emailbox.value,
+                TelefoneOfStd: telefonebox.value
+            }).then(() => {
+                alert("Data updated successfully");
+                clearFields();
+            }).catch((error) => {
+                alert("Unsuccessful, error: " + error);
+            });
+        }
+
+        function DeleteData() {
+            remove(ref(db, "TheEmployees/" + namebox.value)).then(() => {
+                alert("Data removed successfully");
+                clearFields();
+            }).catch((error) => {
+                alert("Unsuccessful, error: " + error);
+            });
+        }
+
+        addBtn.addEventListener('click', InsertData);
+        selectBtn.addEventListener('click', SelectData);
+        editBtn.addEventListener('click', UpdateData);
+        deleteBtn.addEventListener('click', DeleteData);
+
+    </script>
+</body>
+</html>
