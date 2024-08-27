@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Missão</title>
+</head>
+<body>
+    
+    <label>Nome</label><input id="NomeBox" type="text"><br>
+    <label>CPF</label><input id="cpfBox" type="text"><br>
+    <label>RG</label><input id="rgBox" type="text"><br>
+    <label>DataNascimento</label><input id="dataNasciemtnoBox" type="text"><br>
+    <label>Salário</label><input id="salarioBox" type="text"><br>
+    <label>Telefone</label><input id="telefoneBox" type="text"><br>
+    <label>Email</label><input id="emailBox" type="text"><br>
+    <select id="funcaoBox">
+        <option value="secretaria">Secretária</option>
+        <option value="cozinheiro">Cozinheiro</option>
+        <option value="gerente">Gerente</option>
+    </select><br>
+
+    <hr>
+    <button id="AddBtn">Adicionar</button>    
+    <button id="SelectBtn">Selecionar</button>
+    <button id="EditBtn">Editar</button>
+    <button id="DeleteBtn">Deletar</button>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-analytics.js";
+        import { getDatabase, ref, get, set, child, update, remove } 
+        from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
+      
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyCNPBamh-7VZLwNvfG3WVGPYwviipig2Aw",
+          authDomain: "missaovidanova-af3a5.firebaseapp.com",
+          projectId: "missaovidanova-af3a5",
+          storageBucket: "missaovidanova-af3a5.appspot.com",
+          messagingSenderId: "937040393874",
+          appId: "1:937040393874:web:8884b2c52fec36f39ed84b",
+          measurementId: "G-EY5711YV46"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getDatabase();
+
+        var namebox = document.getElementById("NomeBox");
+        var cpfbox = document.getElementById("cpfBox");
+        var rgbox = document.getElementById("rgBox");
+        var salariobox = document.getElementById("salarioBox");
+        var databox = document.getElementById("dataNasciemtnoBox");
+        var funcaobox = document.getElementById("funcaoBox");
+        var emailbox = document.getElementById("emailBox");
+        var telefonebox = document.getElementById("telefoneBox");
+
+        var addBtn = document.getElementById("AddBtn");
+        var selectBtn = document.getElementById("SelectBtn");
+        var editBtn = document.getElementById("EditBtn");
+        var deleteBtn = document.getElementById("DeleteBtn");
+
+        function clearFields() {
+            namebox.value = "";
+            cpfbox.value = "";
+            rgbox.value = "";
+            salariobox.value = "";
+            databox.value = "";
+            funcaobox.value = "";
+            emailbox.value = "";
+            telefonebox.value = "";
+        }
+
+        function SelectData(){
+            const dbref = ref(db);
+            get(child(dbref, "ThePacients/" + namebox.value)).then((snapshot) => {
+                if(snapshot.exists()){
+                    namebox.value = snapshot.val().NameOfStd;
+                    cpfbox.value = snapshot.val().CpfOfStd;
+                    rgbox.value = snapshot.val().RgOfStd;
+                    salariobox.value = snapshot.val().SalarioOfStd;
+                    databox.value = snapshot.val().DataOfStd;
+                    funcaobox.value = snapshot.val().FuncaoOfStd;
+                    emailbox.value = snapshot.val().EmailOfStd;
+                    telefonebox.value = snapshot.val().TelefoneOfStd;
+                } else {
+                    alert("No data found");
+                }
+            })
+            .catch((error) => {
+                alert("Unsuccessful, error: " + error);
+            });
+        } 
+
+        function InsertData(){
+            set(ref(db, "ThePacients/" + namebox.value), {
+                NameOfStd: namebox.value,
+                CpfOfStd: cpfbox.value,
+                RgOfStd: rgbox.value,
+                SalarioOfStd: salariobox.value,
+                DataOfStd: databox.value,
+                FuncaoOfStd: funcaobox.value,
+                EmailOfStd: emailbox.value,
+                TelefoneOfStd: telefonebox.value
+            })
+            .then(() => {
+                alert("Data stored successfully");
+                clearFields();
+            })
+            .catch((error) => {
+                alert("Unsuccessful, error: " + error);
+            });
+        }
+
+        function UpdateData(){
+          update(ref(db, "ThePacients/" + namebox.value), {
+              NameOfStd: namebox.value,
+              CpfOfStd: cpfbox.value,
+              RgOfStd: rgbox.value,
+              SalarioOfStd: salariobox.value,
+              DataOfStd: databox.value,
+              FuncaoOfStd: funcaobox.value,
+              EmailOfStd: emailbox.value,
+              TelefoneOfStd: telefonebox.value
+          })
+          .then(() => {
+              alert("Data updated successfully");
+              clearFields();
+          })
+          .catch((error) => {
+              alert("Unsuccessful, error: " + error);
+          });
+        }
+
+        function DeleteData(){
+          remove(ref(db, "ThePacients/" + namebox.value))
+          .then(() => {
+              alert("Data removed successfully");
+              clearFields();
+          })
+          .catch((error) => {
+              alert("Unsuccessful, error: " + error);
+          });
+        }
+
+        addBtn.addEventListener('click', InsertData);
+        selectBtn.addEventListener('click', SelectData);
+        editBtn.addEventListener('click', UpdateData);
+        deleteBtn.addEventListener('click', DeleteData);
+
+    </script>
+
+</body>
+</html>
